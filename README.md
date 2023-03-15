@@ -16,6 +16,10 @@
 
 ### `npm install react-router-dom --save`
 
+-install Axios dependency
+
+### `npm install axios`
+
 ## Starting the app
 
 ### `npm start`
