@@ -7,21 +7,21 @@ const Register = () => {
     console.log("Received values of form: ", values);
     var u = values.username;
     var p = values.password;
-    const user = {
-      username: u,
-      password: p,
-    };
-    const config = {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    };
+    // const user = {
+    //   username: u,
+    //   password: p,
+    // };
+    // const config = {
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    // };
     axios
-      .post("https://localhost:5001/api/User/Register_User/", user, config)
+      .post("https://localhost:5001/api/User/Register_User/" + u + "/" + p)
       .then((res) => {
         console.log(res.data, "Success");
-        window.location("/login");
+        window.location = "/login";
       })
       .catch((err) => console.log(err.message));
   };
