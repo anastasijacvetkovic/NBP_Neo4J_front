@@ -1,16 +1,29 @@
-import "./ant-design.css";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+
 const Register = () => {
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
+    var u = values.username;
+    var p = values.password;
+    const user = {
+      username: u,
+      password: p,
+    };
+    const config = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    };
+    axios
+      .post("https://localhost:5001/api/User/Register_User/", user, config)
+      .then((res) => {
+        console.log(res.data, "Success");
+        window.location("/login");
+      })
+      .catch((err) => console.log(err.message));
   };
   return (
     <div
@@ -32,6 +45,7 @@ const Register = () => {
         onFinish={onFinish}
       >
         <Form.Item
+          id="username"
           name="username"
           rules={[
             {
@@ -46,6 +60,7 @@ const Register = () => {
           />
         </Form.Item>
         <Form.Item
+          id="password"
           name="password"
           rules={[
             {

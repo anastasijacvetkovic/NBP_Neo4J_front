@@ -1,4 +1,3 @@
-import "./ant-design.css";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Space, Checkbox, Form, Input } from "antd";
 import axios from "axios";

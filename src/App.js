@@ -1,5 +1,5 @@
 import "./App.css";
-import "./ant-design.css";
+import "antd/dist/reset.css";
 import { LoginOutlined, HomeOutlined, HeartOutlined } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
