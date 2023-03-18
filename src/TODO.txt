@@ -2,3 +2,5 @@ home page:
     -deo sa proizvodima sa mogucnoscu pretrage(filteri, search engine)
 favourites:
     -deo sa korisnikovim lajkovanim proizvodima i real time preporukama
+
+DONE: home page - search engine
