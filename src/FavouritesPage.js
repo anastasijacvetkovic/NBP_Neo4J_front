@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Input, Card, Row, Col } from "antd";
+import { Input, Card, Spin, Row, Col } from "antd";
 import axios from "axios";
 import { getUsername } from "./utils";
-
 const Favourites = () => {
   const [liked, setLiked] = useState([]);
+  const [loading, setLoading] = useState(true);
   const username = getUsername();
   useEffect(() => {
     axios
@@ -12,25 +12,29 @@ const Favourites = () => {
       .then((res) => {
         console.log(res.data, "Liked products");
         setLiked(res.data);
+        setLoading(false);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+      });
   }, []);
+  console.log(liked);
   return (
     <div>
-      {liked.map((p) => {
-        return (
-          <Row gutter={16}>
-            <Col span={8}>
-              <div key={p.idp}>
-                <Card title={p.productName} bordered={false}>
-                  <p>Use : {p.use}</p>
-                  <p>Summary : {p.summary}</p>
-                </Card>
-              </div>
+      <Row gutter={[16, 16]}>
+        {loading ? (
+          <Spin />
+        ) : (
+          liked.map((p) => (
+            <Col span={6}>
+              <Card key={p.product.idp} title={p.product.productName}>
+                <p>Use: {p.product.use}</p> <p>Summary: {p.product.summary}</p>
+              </Card>
             </Col>
-          </Row>
-        );
-      })}
+          ))
+        )}
+      </Row>
     </div>
   );
 };
