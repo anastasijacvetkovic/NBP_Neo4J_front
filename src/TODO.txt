@@ -3,4 +3,4 @@ home page:
 favourites:
     -deo sa korisnikovim lajkovanim proizvodima i real time preporukama
 
-DONE: home page - search engine
+DONE: home page - search engine(ne radi za neko slovo npr samo vraca kad se sve ukuca)

@@ -14,6 +14,10 @@ function App() {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    window.location = "/";
+  };
   return (
     <Router>
       <Layout className="layout">
@@ -40,6 +44,14 @@ function App() {
               style={{ float: "right" }}
             >
               <Link to={"/register"}>Register/Login</Link>
+            </Menu.Item>
+
+            <Menu.Item
+              key={"4"}
+              icon={<LoginOutlined />}
+              style={{ float: "right" }}
+            >
+              <Link onClick={logout}>Logout</Link>
             </Menu.Item>
           </Menu>
         </Header>

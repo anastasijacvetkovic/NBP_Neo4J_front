@@ -2,7 +2,9 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Space, Checkbox, Form, Input } from "antd";
 import axios from "axios";
 
+
 const Login = () => {
+
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
     var u = values.username;
@@ -20,6 +22,11 @@ const Login = () => {
     axios
       .get("https://localhost:5001/api/User/LogIn_User/" + u + "/" + p)
       .then((res) => {
+        if (res.data.token != undefined) {
+          localStorage.setItem("token", res.data.token);
+          //window.location.reload();
+        }
+        else console.log("nema sifra bato");
         console.log(res.data, "Success");
         window.location = "/home";
       })
