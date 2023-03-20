@@ -215,44 +215,67 @@ const Home = () => {
   const onChange = (checkedValues) => {
     console.log("checked = ", checkedValues);
   };
-
+  const onFinish = (values) => {
+    //var brandNames = values.name;
+    console.log(values);
+    //axios.get("https://localhost:5001/api/Filter/Filter");
+  };
   /////////////////////////////////////////////////////
   return (
     <div>
       <Search placeholder="input search text" onSearch={onSearch} enterButton />
-      <Form>
-        <p>Brand:</p>
-        {brands.map((p) => {
-          return (
-            <Checkbox value={p.idb} onChange={onChange}>
-              {p.name}
-            </Checkbox>
-          );
-        })}
-        <p>Ingredients:</p>
-        {ing.map((i) => {
-          return (
-            <Checkbox value={i.idi} onChange={onChange}>
-              {i.name}
-            </Checkbox>
-          );
-        })}
-        <p>Product type:</p>
-        {ptype.map((pt) => {
-          return (
-            <Checkbox value={pt.idpt} onChange={onChange}>
-              {pt.name}
-            </Checkbox>
-          );
-        })}
-        <p>Skin type:</p>
-        {stype.map((st) => {
-          return (
-            <Checkbox value={st.idst} onChange={onChange}>
-              {st.sType}
-            </Checkbox>
-          );
-        })}
+      <Form onFinish={onFinish}>
+        <Form.Item>
+          <p>Brand:</p>
+          {brands.map((p) => {
+            return (
+              <Checkbox value={p.idb} onChange={onChange}>
+                {p.name}
+              </Checkbox>
+            );
+          })}
+        </Form.Item>
+        <Form.Item>
+          <p>Ingredients:</p>
+          {ing.map((i) => {
+            return (
+              <Checkbox value={i.idi} onChange={onChange}>
+                {i.name}
+              </Checkbox>
+            );
+          })}
+        </Form.Item>
+        <Form.Item>
+          <p>Product type:</p>
+          {ptype.map((pt) => {
+            return (
+              <Checkbox value={pt.idpt} onChange={onChange}>
+                {pt.name}
+              </Checkbox>
+            );
+          })}
+        </Form.Item>
+
+        <Form.Item>
+          <p>Skin type:</p>
+          {stype.map((st) => {
+            return (
+              <Checkbox value={st.idst} onChange={onChange}>
+                {st.sType}
+              </Checkbox>
+            );
+          })}
+        </Form.Item>
+
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Find
+          </Button>
+        </Form.Item>
       </Form>
       <Row gutter={[16, 16]}>
         {products.map((p) => {
