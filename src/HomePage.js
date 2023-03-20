@@ -97,7 +97,7 @@
 // export default Home;
 
 import React, { useState, useEffect } from "react";
-import { Input, Card, Row, Col, List, Button } from "antd";
+import { Input, Card, Row, Col, Checkbox, Button, Form } from "antd";
 import axios from "axios";
 import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
 import { getUsername } from "./utils";
@@ -106,6 +106,11 @@ const Home = () => {
   const username = getUsername();
   const [products, setProducts] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [ing, setIngredients] = useState([]);
+  const [ptype, setPType] = useState([]);
+  const [stype, setSType] = useState([]);
+  /////////////////////////////////////////////////////
   const onSearch = (value) => {
     axios
       .get("https://localhost:5001/api/User/SearchEngine_Products/" + value)
@@ -140,6 +145,46 @@ const Home = () => {
       .catch((err) => {
         console.log(err.message);
       });
+    //brands
+    axios
+      .get("https://localhost:5001/api/Brand/Get_Brands")
+      .then((res) => {
+        console.log(res.data);
+        setBrands(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    //ingredient
+    axios
+      .get("https://localhost:5001/api/Ingredient/Get_Ingredients")
+      .then((res) => {
+        console.log(res.data);
+        setIngredients(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    //productType
+    axios
+      .get("https://localhost:5001/api/ProductType/Get_ProductType")
+      .then((res) => {
+        console.log(res.data);
+        setPType(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    //skinType
+    axios
+      .get("https://localhost:5001/api/SkinType/Get_SkinType")
+      .then((res) => {
+        console.log(res.data);
+        setSType(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }, []);
   const handleLike = (productName) => {
     axios
@@ -166,9 +211,49 @@ const Home = () => {
         console.log(err.message);
       });
   };
+  /////////////////////////////////////////////////
+  const onChange = (checkedValues) => {
+    console.log("checked = ", checkedValues);
+  };
+
+  /////////////////////////////////////////////////////
   return (
     <div>
       <Search placeholder="input search text" onSearch={onSearch} enterButton />
+      <Form>
+        <p>Brand:</p>
+        {brands.map((p) => {
+          return (
+            <Checkbox value={p.idb} onChange={onChange}>
+              {p.name}
+            </Checkbox>
+          );
+        })}
+        <p>Ingredients:</p>
+        {ing.map((i) => {
+          return (
+            <Checkbox value={i.idi} onChange={onChange}>
+              {i.name}
+            </Checkbox>
+          );
+        })}
+        <p>Product type:</p>
+        {ptype.map((pt) => {
+          return (
+            <Checkbox value={pt.idpt} onChange={onChange}>
+              {pt.name}
+            </Checkbox>
+          );
+        })}
+        <p>Skin type:</p>
+        {stype.map((st) => {
+          return (
+            <Checkbox value={st.idst} onChange={onChange}>
+              {st.sType}
+            </Checkbox>
+          );
+        })}
+      </Form>
       <Row gutter={[16, 16]}>
         {products.map((p) => {
           return (
