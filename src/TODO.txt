@@ -4,3 +4,8 @@ favourites:
     -deo sa korisnikovim lajkovanim proizvodima i real time preporukama
 
 DONE: home page - search engine(ne radi za neko slovo npr samo vraca kad se sve ukuca)
+
+Leftend:
+admin page (CRUD)
+product page (Product view) - da se klikne pa da izadje
+filters

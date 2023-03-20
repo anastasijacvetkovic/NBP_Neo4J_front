@@ -1,111 +1,12 @@
-// import React, { useState, useEffect } from "react";
-// import { Input, Card, Row, Col, List, Button } from "antd";
-// import axios from "axios";
-// import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
-// import { getUsername } from "./utils";
-
-// const { Search } = Input;
-// const Home = () => {
-//   const username = getUsername();
-//   const [products, setProducts] = useState([]);
-//   const [likedProducts, setLikedProducts] = useState([]);
-//   const onSearch = (value) => {
-//     axios
-//       .get("https://localhost:5001/api/User/SearchEngine_Products/" + value)
-//       .then((res) => {
-//         console.log(res.data, "Pronaso");
-//         setProducts(res.data);
-//       })
-//       .catch((err) => console.log(err.message));
-//   };
-//   useEffect(() => {
-//     axios
-//       .get("https://localhost:5001/api/Product/Get_Products")
-//       .then((res) => {
-//         console.log(res.data, "Izbacio sve");
-
-//         setProducts(res.data);
-//       })
-//       .catch((err) => console.log(err.message));
-
-//     axios
-//       .get("https://localhost:5001/api/User/LikeList_User/" + username)
-//       .then((res) => {
-//         console.log(res.data, "Liked products");
-//       })
-//       .catch((err) => {
-//         console.log(err.message);
-//       });
-//   }, []);
-//   const handleLike = (id) => {
-//     //console.log("Product liked with id: ", id); // add logic to handle liking the product
-//     axios
-//       .post(
-//         "https://localhost:5001/api/Relationships/Assign_Likes/" +
-//           username +
-//           "/" +
-//           id
-//       )
-//       .then((res) => {
-//         console.log("Liked");
-//         setLikedProducts([...likedProducts, id]);
-//       })
-//       .catch((err) => {
-//         console.log(err.message);
-//       });
-//   };
-//   return (
-//     <div>
-//       <Search placeholder="input search text" onSearch={onSearch} enterButton />
-//       <Row gutter={[16, 16]}>
-//         {products.map((p) => {
-//           const isLiked = likedProducts.includes(p.productName);
-//           return (
-//             <Col span={6}>
-//               <Card
-//                 title={
-//                   <div
-//                     style={{ display: "flex", justifyContent: "space-between" }}
-//                   >
-//                     <span>{p.productName}</span>
-//                     <Button
-//                       type="text"
-//                       onClick={() => handleLike(p.productName)}
-//                       icon={
-//                         isLiked ? (
-//                           <HeartTwoTone twoToneColor="#eb2f96" />
-//                         ) : (
-//                           <HeartOutlined />
-//                         )
-//                       }
-//                     />
-//                   </div>
-//                 }
-//                 bordered={false}
-//                 style={{ width: 300 }}
-//               >
-//                 <p>Use : {p.use}</p>
-//                 <p>Summary : {p.summary}</p>
-//               </Card>
-//             </Col>
-//           );
-//         })}
-//       </Row>
-//     </div>
-//   );
-// };
-// export default Home;
-
 import React, { useState, useEffect } from "react";
 import { Input, Card, Row, Col, Checkbox, Button, Form } from "antd";
 import axios from "axios";
-import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
+import { HeartOutlined } from "@ant-design/icons";
 import { getUsername } from "./utils";
 const { Search } = Input;
 const Home = () => {
   const username = getUsername();
   const [products, setProducts] = useState([]);
-  const [likedProducts, setLikedProducts] = useState([]);
   const [brands, setBrands] = useState([]);
   const [ing, setIngredients] = useState([]);
   const [ptype, setPType] = useState([]);
@@ -121,13 +22,24 @@ const Home = () => {
       .catch((err) => console.log(err.message));
   };
   useEffect(() => {
-    axios
-      .get("https://localhost:5001/api/Product/Get_Products")
-      .then((res) => {
-        console.log(res.data, "Izbacio sve");
-        setProducts(res.data);
-      })
-      .catch((err) => console.log(err.message));
+    if(localStorage.getItem("token") == null){
+         axios
+           .get("https://localhost:5001/api/Product/Get_Products")
+           .then((res) => {
+             console.log(res.data, "Izbacio sve");
+             setProducts(res.data);
+           })
+           .catch((err) => console.log(err.message));
+    }else{
+      axios
+        .get("https://localhost:5001/api/Product/GetNotLiked/"+username)
+        .then((res) => {
+          console.log(res.data, "Izbacio sve od usera");
+          setProducts(res.data);
+        })
+        .catch((err) => console.log(err.message));
+    }
+ 
     axios
       .get("https://localhost:5001/api/User/LikeList_User/" + username)
       .then((res) => {
@@ -196,16 +108,8 @@ const Home = () => {
       )
       .then((res) => {
         console.log("Liked");
-        setLikedProducts([...likedProducts, productName]); // add the liked product to likedProducts state
-        setProducts((prevProducts) => {
-          return prevProducts.map((p) => {
-            if (p.productName === productName) {
-              return { ...p, liked: true }; // set the 'liked' property of the product to true
-            } else {
-              return p;
-            }
-          });
-        });
+    
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err.message);
@@ -291,11 +195,9 @@ const Home = () => {
                       type="text"
                       onClick={() => handleLike(p.productName)}
                       icon={
-                        likedProducts.includes(p.productName) ? (
-                          <HeartTwoTone twoToneColor="#eb2f96" />
-                        ) : (
+                     
                           <HeartOutlined />
-                        )
+                       
                       }
                     />
                   </div>

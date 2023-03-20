@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Input, Card, Spin, Row, Col } from "antd";
+import { Input, Card, Spin, Row, Col, Divider, Button } from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { getUsername } from "./utils";
+import { Typography } from "antd";
+const { Title } = Typography;
 const Favourites = () => {
   const [liked, setLiked] = useState([]);
+  const [others, setOthers] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
   const username = getUsername();
+  const unlike = () => {};
   useEffect(() => {
     axios
       .get("https://localhost:5001/api/User/LikeList_User/" + username)
@@ -18,22 +24,105 @@ const Favourites = () => {
         console.log(err.message);
         setLoading(false);
       });
+    // axios
+    //   .get(
+    //     "https://localhost:5001/api/Filter/Recommend_ProductsBySimilarity/" +
+    //       username
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data, "Liked products similarity");
+    //     setOthers(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.message);
+    //   });
+
+    axios
+      .get(
+        "https://localhost:5001/api/Filter/Recommend_ProductsByBrand/" +
+          username
+      )
+      .then((res) => {
+        console.log(res.data, "Liked products brand");
+        setBrands(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }, []);
-  console.log(liked);
+
+  const handleDislike = (productName) => {
+    axios
+      .delete(
+        "https://localhost:5001/api/Relationships/Delete_Assign_Liked/" +
+          username +
+          "/" +
+          productName
+      )
+      .then((res) => {
+        console.log("Disliked");
+
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
   return (
     <div>
+      <Title level={2}>Your liked products:</Title>
       <Row gutter={[16, 16]}>
         {loading ? (
           <Spin />
         ) : (
           liked.map((p) => (
             <Col span={6}>
-              <Card key={p.product.idp} title={p.product.productName}>
-                <p>Use: {p.product.use}</p> <p>Summary: {p.product.summary}</p>
+              <Card
+                title={
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <span>{p.product.productName}</span>
+                    <Button
+                      type="text"
+                      onClick={() => handleDislike(p.product.productName)}
+                      icon={<CloseCircleOutlined />}
+                    />
+                  </div>
+                }
+                bordered={false}
+                style={{ width: 300 }}
+              >
+                <p>Use : {p.product.use}</p>
+                <p>Summary : {p.product.summary}</p>
               </Card>
             </Col>
           ))
         )}
+      </Row>
+      <Divider orientation="left" orientationMargin="0">
+        Others also liked:
+      </Divider>
+      <Row gutter={[16, 16]}>
+        {others.map((p) => (
+          <Col span={6}>
+            <Card key={p.others.idp} title={p.others.productName}>
+              <p>Use: {p.others.use}</p> <p>Summary: {p.others.summary}</p>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+      <Divider orientation="left" orientationMargin="0">
+        Best products of your favorite brand:
+      </Divider>
+      <Row gutter={[16, 16]}>
+        {brands.map((p) => (
+          <Col span={6}>
+            <Card key={p.product.idp} title={p.product.productName}>
+              <p>Use: {p.product.use}</p> <p>Summary: {p.product.summary}</p>
+            </Card>
+          </Col>
+        ))}
       </Row>
     </div>
   );
