@@ -7,12 +7,64 @@ import {
   Input,
   Button,
   Form,
+  InputNumber,
 } from "antd";
 const { Title } = Typography;
 
 const Admin = () => {
   const onFinish = (values) => {
     console.log("Success:", values);
+  };
+  const onFinishAB = (values) => {
+    console.log("Success:", values);
+    var bn = values.name;
+    var bf = values.founder;
+    var bs = values.summary;
+    const brand = {
+      name: bn,
+      founder: bf,
+      summary: bs,
+    };
+    axios
+      .post("https://localhost:5001/api/Brand/Create_Brand/", brand)
+      .then((res) => {
+        console.log(res.data, "brand created!");
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const onFinishAI = (values) => {
+    console.log("Success:", values);
+    var ingn = values.name;
+    var iu = values.usage;
+    var ii = values.irritancy;
+    const ing = {
+      name: ingn,
+      usage: iu,
+      irritancy: ii,
+    };
+    axios
+      .post("https://localhost:5001/api/Ingredient/Create_Ingredient/", ing)
+      .then((res) => {
+        console.log(res.data, "ingredient created!");
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const onFinishAP = (values) => {
+    console.log("Success:", values);
+    var pn = values.productName;
+    var pu = values.use;
+    var ps = values.summary;
+    const prod = {
+      productName: pn,
+      use: pu,
+      summary: ps,
+    };
+    axios
+      .post("https://localhost:5001/api/Product/Create_Product/", prod)
+      .then((res) => {
+        console.log(res.data, "product created!");
+      })
+      .catch((err) => console.log(err.message));
   };
   const items = [
     {
@@ -64,20 +116,14 @@ const Admin = () => {
       <Divider orientation="left">Add product</Divider>
       <Form
         name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
         style={{
           maxWidth: 600,
         }}
-        onFinish={onFinish}
+        onFinish={onFinishAP}
       >
         <Form.Item
           label="Product name"
-          name="ProductName"
+          name="productName"
           rules={[
             {
               required: true,
@@ -90,7 +136,7 @@ const Admin = () => {
 
         <Form.Item
           label="Product use"
-          name="ProductUse"
+          name="use"
           rules={[
             {
               required: true,
@@ -102,7 +148,7 @@ const Admin = () => {
         </Form.Item>
         <Form.Item
           label="Product summary"
-          name="ProductSummary"
+          name="summary"
           rules={[
             {
               required: true,
@@ -124,6 +170,88 @@ const Admin = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Divider orientation="left">Update product</Divider>
+      <Dropdown menu={{ items }}>
+        <a onClick={(e) => e.preventDefault()}>
+          <Space>Pick product you want to update</Space>
+        </a>
+      </Dropdown>
+      <Form
+        name="basic"
+        style={{
+          maxWidth: 600,
+        }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+          label="Product name"
+          name="productName"
+          rules={[
+            {
+              required: true,
+              message: "Please input product's name!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Product use"
+          name="use"
+          rules={[
+            {
+              required: true,
+              message: "Please input product's use!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Product summary"
+          name="summary"
+          rules={[
+            {
+              required: true,
+              message: "Please input product's summary!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Update product
+          </Button>
+        </Form.Item>
+      </Form>
+      <Divider orientation="left">Delete product</Divider>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "inline-block",
+          paddingLeft: "50px",
+        }}
+      >
+        <Space size="large">
+          <Dropdown menu={{ items }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>Pick product you want to delete</Space>
+            </a>
+          </Dropdown>
+          <Button type="primary" htmlType="onCLick">
+            Delete product
+          </Button>
+        </Space>
+      </div>
+      <Title level={3}>Relationships</Title>
       <Divider orientation="left">
         Assign or delete relationship between ingredient and product
       </Divider>
@@ -178,6 +306,7 @@ const Admin = () => {
           </Button>
         </Space>
       </div>
+
       <Divider orientation="left">
         Assign or delete relationship between skin type and product
       </Divider>
@@ -245,11 +374,11 @@ const Admin = () => {
         style={{
           maxWidth: 600,
         }}
-        onFinish={onFinish}
+        onFinish={onFinishAI}
       >
         <Form.Item
           label="Ingredient name"
-          name="IngredientName"
+          name="name"
           rules={[
             {
               required: true,
@@ -262,7 +391,7 @@ const Admin = () => {
 
         <Form.Item
           label="Ingredient usage"
-          name="IngredientUsage"
+          name="usage"
           rules={[
             {
               required: true,
@@ -274,7 +403,7 @@ const Admin = () => {
         </Form.Item>
         <Form.Item
           label="Ingredient irritancy"
-          name="IngredientIrritancy"
+          name="irritancy"
           rules={[
             {
               required: true,
@@ -282,7 +411,7 @@ const Admin = () => {
             },
           ]}
         >
-          <Input />
+          <InputNumber min={1} max={10} defaultValue={3} />
         </Form.Item>
 
         <Form.Item
@@ -387,20 +516,14 @@ const Admin = () => {
       <Divider orientation="left">Create brand</Divider>
       <Form
         name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
         style={{
           maxWidth: 600,
         }}
-        onFinish={onFinish}
+        onFinish={onFinishAB}
       >
         <Form.Item
           label="Brand name"
-          name="BrandName"
+          name="name"
           rules={[
             {
               required: true,
@@ -413,7 +536,7 @@ const Admin = () => {
 
         <Form.Item
           label="Brand founder"
-          name="BrandFounder"
+          name="founder"
           rules={[
             {
               required: true,
@@ -425,11 +548,11 @@ const Admin = () => {
         </Form.Item>
         <Form.Item
           label="Brand summary"
-          name="BrandSummary"
+          name="summary"
           rules={[
             {
               required: true,
-              message: "Please input brand's irritancy!",
+              message: "Please input brand's summary!",
             },
           ]}
         >
