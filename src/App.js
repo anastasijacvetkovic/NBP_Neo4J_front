@@ -91,6 +91,7 @@ function App() {
             className="site-layout-content"
             style={{
               background: colorBgContainer,
+              width: "100%",
             }}
           >
             {/* content of each page */}
