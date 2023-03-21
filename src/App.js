@@ -1,13 +1,21 @@
 import "./App.css";
 import "antd/dist/reset.css";
-import { LoginOutlined, HomeOutlined, HeartOutlined } from "@ant-design/icons";
+import { getUsername } from "./utils";
+import {
+  LoginOutlined,
+  CrownOutlined,
+  HomeOutlined,
+  HeartOutlined,
+} from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Login from "./LoginPage";
 import Register from "./RegisterPage";
 import Home from "./HomePage";
 import Favourites from "./FavouritesPage";
+import Admin from "./AdminPage";
 import MenuItem from "antd/es/menu/MenuItem";
+import { useState, useEffect } from "react";
 const { Header, Content, Footer } = Layout;
 function App() {
   const {
@@ -18,6 +26,13 @@ function App() {
     localStorage.removeItem("token");
     window.location = "/";
   };
+  const username = getUsername();
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    if (username === "admin") {
+      setIsAdmin(true);
+    }
+  }, [username]);
   return (
     <Router>
       <Layout className="layout">
@@ -37,9 +52,19 @@ function App() {
             >
               <Link to={"/favourites"}>Favourites</Link>
             </MenuItem>
-
+            {isAdmin ? (
+              <MenuItem
+                key={"3"}
+                icon={<CrownOutlined />}
+                style={{ float: "left" }}
+              >
+                <Link to={"/admin"}>Admin</Link>
+              </MenuItem>
+            ) : (
+              <></>
+            )}
             <Menu.Item
-              key={"3"}
+              key={"4"}
               icon={<LoginOutlined />}
               style={{ float: "right" }}
             >
@@ -47,7 +72,7 @@ function App() {
             </Menu.Item>
 
             <Menu.Item
-              key={"4"}
+              key={"5"}
               icon={<LoginOutlined />}
               style={{ float: "right" }}
             >
@@ -74,6 +99,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/home" element={<Home />} />
               <Route path="/favourites" element={<Favourites />} />
+              <Route path="/admin" element={<Admin />} />
             </Routes>
           </div>
         </Content>
