@@ -101,7 +101,9 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/favourites" element={<Favourites />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="/product" element={<Product />} />
+              
+              {/* <Route path="/product" element={<Product />} /> */}
+              <Route path="/product/:prodName" element={<Product />} />
             </Routes>
           </div>
         </Content>
