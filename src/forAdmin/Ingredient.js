@@ -92,6 +92,35 @@ const IngredientAdmin = () => {
       })
       .catch((err) => console.log(err.message));
   };
+  const updateIng = (e) => {
+    var iname = e.UpdateIngredientName;
+    var usage = e.UpdateIngredientUsage;
+    var irt = e.updateIngredientIrritancy;
+    axios
+      .put(
+        "https://localhost:5001/api/Ingredient/Update_Ingredient/" +
+          iname +
+          "/" +
+          usage +
+          "/" +
+          irt
+      )
+      .then((res) => {
+        message.success("successfully updated");
+      })
+      .catch((err) => console.log(err.message));
+  };
+  // /api/Ingredient/Update_Ingredient/{name}/{usage}/{irritancy}
+  const delteIngredient = (e) => {
+    var pr = e.ingName;
+    axios
+      .delete("https://localhost:5001/api/Ingredient/Delete_Ingredient/" + pr)
+      .then((res) => {
+        message.success("successfully deleted");
+      })
+      .catch((err) => console.log(err.message));
+  };
+
   return (
     <>
       <Title level={3}>Ingredient</Title>
@@ -154,17 +183,12 @@ const IngredientAdmin = () => {
       </Form>
       <Divider orientation="left">Update ingredient</Divider>
       <Space size="large" align="start">
-        <Dropdown menu={{ items }}>
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>Pick ingredient you want to update</Space>
-          </a>
-        </Dropdown>
         <Form
           name="basic"
           style={{
             maxWidth: 700,
           }}
-          onFinish={onFinish}
+          onFinish={updateIng}
         >
           <Form.Item
             label="Ingredient name"
@@ -201,7 +225,7 @@ const IngredientAdmin = () => {
               },
             ]}
           >
-            <Input />
+            <InputNumber min={1} max={10} defaultValue={3} />
           </Form.Item>
 
           <Form.Item
@@ -225,14 +249,28 @@ const IngredientAdmin = () => {
         }}
       >
         <Space size="large">
-          <Dropdown menu={{ items }}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>Pick ingredient you want to delete</Space>
-            </a>
-          </Dropdown>
-          <Button type="primary" htmlType="onCLick">
-            Delete ingredient
-          </Button>
+          <Form
+            name="basic"
+            style={{
+              maxWidth: 700,
+            }}
+            onFinish={delteIngredient}
+          >
+            <Form.Item label="Ingredient name" name="ingName">
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 8,
+                span: 16,
+              }}
+            >
+              <Button type="primary" htmlType="submit">
+                Delete ingredient
+              </Button>
+            </Form.Item>
+          </Form>
         </Space>
       </div>
     </>

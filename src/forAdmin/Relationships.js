@@ -15,56 +15,19 @@ import {
 const { Title } = Typography;
 
 const RelationshipsAdmin = () => {
-  const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          1st menu item
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item (disabled)
-        </a>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-    {
-      key: "4",
-      danger: true,
-      label: "a danger item",
-    },
-  ];
-
   useEffect(() => {
     getProducts();
+    getIngredients();
+    getBrands();
+    getSkinTypes();
+    getProductTypes();
   }, []);
   const onFinish = (values) => {};
   const [products, setProducts] = useState([]);
+  const [ing, setIng] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [st, setSkinTypes] = useState([]);
+  const [pt, setProductTypes] = useState([]);
   const [productData, setProductData] = useState();
   const getProducts = () => {
     axios
@@ -74,6 +37,169 @@ const RelationshipsAdmin = () => {
       })
       .catch((err) => console.log(err.message));
   };
+  const getIngredients = () => {
+    axios
+      .get("https://localhost:5001/api/Ingredient/Get_Ingredients")
+      .then((res) => {
+        setIng(res.data);
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const getBrands = () => {
+    axios
+      .get("https://localhost:5001/api/Brand/Get_Brands")
+      .then((res) => {
+        setBrands(res.data);
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const getSkinTypes = () => {
+    axios
+      .get("https://localhost:5001/api/SkinType/Get_SkinType")
+      .then((res) => {
+        setSkinTypes(res.data);
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const getProductTypes = () => {
+    axios
+      .get("https://localhost:5001/api/ProductType/Get_ProductType")
+      .then((res) => {
+        setProductTypes(res.data);
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const onFinishAssPI = (e) => {
+    console.log(e);
+    var pr = e.productName;
+    var ing = e.ingName;
+    var pre = e.prec;
+    console.log(pr, ing, pre);
+    axios
+      .post(
+        "https://localhost:5001/api/Relationships/Assign_Contains/" +
+          ing +
+          "/" +
+          pr +
+          "/" +
+          pre
+      )
+      .then((res) => {
+        console.log("pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const deleteAssPI = (e) => {
+    var pr = e.productName;
+    var ing = e.ingName;
+    console.log(pr, ing);
+
+    axios
+      .delete(
+        "https://localhost:5001/api/Relationships/Delete_Contains/" +
+          ing +
+          "/" +
+          pr
+      )
+      .then((res) => {
+        console.log("pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const onFinishAssPB = (e) => {
+    var pr = e.productName;
+    var br = e.brName;
+    axios
+      .post(
+        "https://localhost:5001/api/Relationships/Assign_SoldBy/" +
+          pr +
+          "/" +
+          br
+      )
+      .then((res) => {
+        console.log("pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const deleteAssPB = (e) => {
+    var pr = e.productName;
+    var br = e.brName;
+
+    axios
+      .delete(
+        "https://localhost:5001/api/Relationships/Delete_SoldBy/" +
+          pr +
+          "/" +
+          br
+      )
+      .then((res) => {
+        console.log("pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const onFinishAssPST = (e) => {
+    var pr = e.productName;
+    var st = e.stName;
+    axios
+      .post(
+        "https://localhost:5001/api/Relationships/Assign_IntendedFor/" +
+          pr +
+          "/" +
+          st
+      )
+      .then((res) => {
+        console.log("pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const deleteAssPST = (e) => {
+    var pr = e.productName;
+    var st = e.stName;
+
+    axios
+      .delete(
+        "https://localhost:5001/api/Relationships/Delete_IntendedFor/" +
+          pr +
+          "/" +
+          st
+      )
+      .then((res) => {
+        console.log("pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
+   const onFinishAssPPT = (e) => {
+     var pr = e.productName;
+     var br = e.brName;
+     axios
+       .post(
+         "https://localhost:5001/api/Relationships/Assign_UsedAs/" +
+           pr +
+           "/" +
+           br
+       )
+       .then((res) => {
+         console.log("pogle u neo4j");
+       })
+       .catch((err) => console.log(err.message));
+   };
+   const deleteAssPPT = (e) => {
+     var pr = e.productName;
+     var br = e.brName;
+
+     axios
+       .delete(
+         "https://localhost:5001/api/Relationships/Delete_UsedAs/" +
+           pr +
+           "/" +
+           br
+       )
+       .then((res) => {
+         console.log("pogle u neo4j");
+       })
+       .catch((err) => console.log(err.message));
+   };
   return (
     <>
       <Title level={3}>Relationships</Title>
@@ -88,30 +214,103 @@ const RelationshipsAdmin = () => {
             paddingLeft: "50px",
           }}
         >
-          <Space size="large">
-            <Dropdown
-              menu={{
-                items: products.map((product) => ({
-                  key: product.id,
-                  value: product.productName,
-                  label: product.productName,
-                })),
-                selectable: true,
+          <Space size="large" align="start">
+            <Form
+              name="basic"
+              style={{
+                maxWidth: 700,
               }}
+              onFinish={onFinishAssPI}
             >
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>Product</Space>
-              </a>
-            </Dropdown>
+              <Form.Item
+                label="Product name"
+                name="productName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Ingredient name"
+                name="ingName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input ingredient's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-            <Dropdown menu={{ items }}>
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>Ingredient</Space>
-              </a>
-            </Dropdown>
-            <Button type="primary" htmlType="onCLick">
-              Delete relationship
-            </Button>
+              <Form.Item label="Percentage" name="prec">
+                <InputNumber min={1} max={10} defaultValue={3} />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="submit">
+                  Assign relationship
+                </Button>
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              ></Form.Item>
+            </Form>
+            <Form
+              name="basic"
+              style={{
+                maxWidth: 700,
+              }}
+              onFinish={deleteAssPI}
+            >
+              <Form.Item
+                label="Product name"
+                name="productName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Ingredient name"
+                name="ingName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input ingredient's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="subimt">
+                  Delete relationship
+                </Button>
+              </Form.Item>
+            </Form>
           </Space>
         </div>
         <Divider orientation="left">
@@ -124,30 +323,99 @@ const RelationshipsAdmin = () => {
             paddingLeft: "50px",
           }}
         >
-          <Space size="large">
-            <Dropdown
-              menu={{
-                items: products.map((product) => ({
-                  key: product.id,
-                  value: product.productName,
-                  label: product.productName,
-                })),
-                selectable: true,
+          <Space size="large" lign="start">
+            <Form
+              name="basic"
+              style={{
+                maxWidth: 700,
               }}
+              onFinish={onFinishAssPB}
             >
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>Product</Space>
-              </a>
-            </Dropdown>
+              <Form.Item
+                label="Product name"
+                name="productName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Brand name"
+                name="brName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input brands's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="submit">
+                  Assign relationship
+                </Button>
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              ></Form.Item>
+            </Form>
 
-            <Dropdown menu={{ items }}>
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>Brand</Space>
-              </a>
-            </Dropdown>
-            <Button type="primary" htmlType="onCLick">
-              Delete relationship
-            </Button>
+            <Form
+              name="basic"
+              style={{
+                maxWidth: 700,
+              }}
+              onFinish={deleteAssPB}
+            >
+              <Form.Item
+                label="Product name"
+                name="productName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Brand name"
+                name="brName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input brand's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="subimt">
+                  Delete relationship
+                </Button>
+              </Form.Item>
+            </Form>
           </Space>
         </div>
 
@@ -161,30 +429,99 @@ const RelationshipsAdmin = () => {
             paddingLeft: "50px",
           }}
         >
-          <Space size="large">
-            <Dropdown
-              menu={{
-                items: products.map((product) => ({
-                  key: product.id,
-                  value: product.productName,
-                  label: product.productName,
-                })),
-                selectable: true,
+          <Space size="large" lign="start">
+            <Form
+              name="basic"
+              style={{
+                maxWidth: 700,
               }}
+              onFinish={onFinishAssPST}
             >
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>Product</Space>
-              </a>
-            </Dropdown>
+              <Form.Item
+                label="Product name"
+                name="productName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Skin type"
+                name="stName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input skin type's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="submit">
+                  Assign relationship
+                </Button>
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              ></Form.Item>
+            </Form>
 
-            <Dropdown menu={{ items }}>
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>Skin type</Space>
-              </a>
-            </Dropdown>
-            <Button type="primary" htmlType="onCLick">
-              Delete relationship
-            </Button>
+            <Form
+              name="basic"
+              style={{
+                maxWidth: 700,
+              }}
+              onFinish={deleteAssPST}
+            >
+              <Form.Item
+                label="Product name"
+                name="productName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Skin type"
+                name="stName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input skin type's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="subimt">
+                  Delete relationship
+                </Button>
+              </Form.Item>
+            </Form>
           </Space>
         </div>
         <Divider orientation="left">
@@ -197,30 +534,99 @@ const RelationshipsAdmin = () => {
             paddingLeft: "50px",
           }}
         >
-          <Space size="large">
-            <Dropdown
-              menu={{
-                items: products.map((product) => ({
-                  key: product.id,
-                  value: product.productName,
-                  label: product.productName,
-                })),
-                selectable: true,
+          <Space size="large" lign="start">
+            <Form
+              name="basic"
+              style={{
+                maxWidth: 700,
               }}
+              onFinish={onFinishAssPPT}
             >
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>Product</Space>
-              </a>
-            </Dropdown>
+              <Form.Item
+                label="Product name"
+                name="productName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Product type"
+                name="ptName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product type's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="submit">
+                  Assign relationship
+                </Button>
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              ></Form.Item>
+            </Form>
 
-            <Dropdown menu={{ items }}>
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>Product type</Space>
-              </a>
-            </Dropdown>
-            <Button type="primary" htmlType="onCLick">
-              Delete relationship
-            </Button>
+            <Form
+              name="basic"
+              style={{
+                maxWidth: 700,
+              }}
+              onFinish={deleteAssPPT}
+            >
+              <Form.Item
+                label="Product name"
+                name="productName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Product type"
+                name="ptName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input product type's name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="subimt">
+                  Delete relationship
+                </Button>
+              </Form.Item>
+            </Form>
           </Space>
         </div>
       </div>

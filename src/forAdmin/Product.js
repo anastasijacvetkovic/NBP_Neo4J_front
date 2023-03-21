@@ -20,8 +20,26 @@ const ProductAdmin = () => {
   }, []);
 
   const [products, setProducts] = useState([]);
-  const [productData, setProductData] = useState(null);
-  const onFinish = (values) => {};
+  const [productData, setProductData] = useState({});
+  const onFinish = (values) => {
+    var name = values.productName;
+    var u = values.use;
+    var s = values.summary;
+
+    axios
+      .put(
+        "https://localhost:5001/api/Product/Update_Product/" +
+          name +
+          "/" +
+          u +
+          "/" +
+          s
+      )
+      .then((res) => {
+        console.log("Pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
   const getProducts = () => {
     axios
       .get("https://localhost:5001/api/Product/Get_Products/")
@@ -32,9 +50,16 @@ const ProductAdmin = () => {
   };
   const getProduct = (productName) => {
     axios
-      .get("https://localhost:5001/api/Product/Get_Product/" + productName)
+      .get(
+        "https://localhost:5001/api/Product/Get_ProductForUpdate/" + productName
+      )
       .then((res) => {
-        setProductData(res.data);
+        console.log(res.data);
+        setProductData({
+          prName: res.data.productName,
+          prUse: res.data.use,
+          prSummary: res.data.summary,
+        });
       })
       .catch((err) => console.log(err.message));
   };
@@ -56,53 +81,19 @@ const ProductAdmin = () => {
   };
   const SelectProduct = (productName) => {
     message.info("you selected product named " + productName + " for update");
+    //console.log(productName);
+
     getProduct(productName);
   };
-  const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          1st menu item
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item (disabled)
-        </a>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-    {
-      key: "4",
-      danger: true,
-      label: "a danger item",
-    },
-  ];
-
+  const delteProduct = (e) => {
+    var pr = e.prodName;
+    axios
+      .delete("https://localhost:5001/api/Product/Delete_Product/" + pr)
+      .then((res) => {
+        message.success("successfully deleted");
+      })
+      .catch((err) => console.log(err.message));
+  };
   return (
     <>
       <Title level={3}>Product</Title>
@@ -165,28 +156,7 @@ const ProductAdmin = () => {
       </Form>
       <Divider orientation="left">Update product</Divider>
       <Space size="large" align="start">
-        <Dropdown
-          trigger={["click"]}
-          menu={{
-            items: products.map((product) => ({
-              key: product.id,
-              value: product.productName,
-              label: product.productName,
-              onClick: () => SelectProduct(product.productName),
-            })),
-            selectable: true,
-          }}
-        >
-          <a
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <Space>Pick a product you want to update</Space>
-          </a>
-        </Dropdown>
         <Form
-          form={form}
           name="basic"
           style={{
             maxWidth: 700,
@@ -194,14 +164,14 @@ const ProductAdmin = () => {
           onFinish={onFinish}
         >
           <Form.Item label="Product name" name="productName">
-            <Input value={productData?.productName} />
+            <Input defaultValue={productData.prName} />
           </Form.Item>
 
           <Form.Item label="Product use" name="use">
-            <Input value={productData?.use} />
+            <Input defaultValue={productData.prUse} />
           </Form.Item>
           <Form.Item label="Product summary" name="summary">
-            <Input value={productData?.summary} />
+            <Input defaultValue={productData.prSummary} />
           </Form.Item>
 
           <Form.Item
@@ -225,14 +195,28 @@ const ProductAdmin = () => {
         }}
       >
         <Space size="large">
-          <Dropdown menu={{ items }}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>Pick product you want to delete</Space>
-            </a>
-          </Dropdown>
-          <Button type="primary" htmlType="onClick">
-            Delete product
-          </Button>
+          <Form
+            name="basic"
+            style={{
+              maxWidth: 700,
+            }}
+            onFinish={delteProduct}
+          >
+            <Form.Item label="Product name" name="prodName">
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 8,
+                span: 16,
+              }}
+            >
+              <Button type="primary" htmlType="submit">
+                Delete product
+              </Button>
+            </Form.Item>
+          </Form>
         </Space>
       </div>
     </>

@@ -18,7 +18,24 @@ const BrandAdmin = () => {
   useEffect(() => {
     getProducts();
   }, []);
-  const onFinish = (values) => {};
+  const updateBrand = (values) => {
+    var bn = values.UpdateBrandName;
+    var bf = values.UpdateBrandFounder;
+    var bs = values.updateBrandSummary;
+    axios
+      .put(
+        "https://localhost:5001/api/Brand/Update_Brand/" +
+          bn +
+          "/" +
+          bf +
+          "/" +
+          bs
+      )
+      .then((res) => {
+        console.log("Pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
   const onFinishAB = (values) => {
     var bn = values.name;
     var bf = values.founder;
@@ -38,56 +55,21 @@ const BrandAdmin = () => {
   const [products, setProducts] = useState([]);
   const [productData, setProductData] = useState();
 
-  const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          1st menu item
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item (disabled)
-        </a>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-    {
-      key: "4",
-      danger: true,
-      label: "a danger item",
-    },
-  ];
-
   const getProducts = () => {
     axios
       .get("https://localhost:5001/api/Product/Get_Products/")
       .then((res) => {
         setProducts(res.data);
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const deleteBrand = (e) => {
+    var pr = e.brName;
+    axios
+      .delete("https://localhost:5001/api/Brand/Delete_Brand/" + pr)
+      .then((res) => {
+        message.success("successfully deleted");
       })
       .catch((err) => console.log(err.message));
   };
@@ -153,17 +135,12 @@ const BrandAdmin = () => {
       </Form>
       <Divider orientation="left">Update brand</Divider>
       <Space size="large" align="start">
-        <Dropdown menu={{ items }}>
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>Pick brand you want to update</Space>
-          </a>
-        </Dropdown>
         <Form
           name="basic"
           style={{
             maxWidth: 700,
           }}
-          onFinish={onFinish}
+          onFinish={updateBrand}
         >
           <Form.Item
             label="Brand name"
@@ -196,7 +173,7 @@ const BrandAdmin = () => {
             rules={[
               {
                 required: true,
-                message: "Please input brand's irritancy!",
+                message: "Please input brand's summary!",
               },
             ]}
           >
@@ -224,14 +201,29 @@ const BrandAdmin = () => {
         }}
       >
         <Space size="large">
-          <Dropdown menu={{ items }}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>Pick brand you want to delete</Space>
-            </a>
-          </Dropdown>
-          <Button type="primary" htmlType="onClick">
-            Delete brand
-          </Button>
+          <Form
+            name="basic"
+            style={{
+              maxWidth: 700,
+            }}
+            onFinish={deleteBrand}
+          >
+            <Form.Item
+              label="Brand name"
+              name="brName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input brand's name!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Button type="primary" htmlType="onClick">
+              Delete brand
+            </Button>
+          </Form>
         </Space>
       </div>
     </>

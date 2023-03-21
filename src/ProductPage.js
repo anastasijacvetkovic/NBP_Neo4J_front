@@ -18,7 +18,6 @@ const Product = () => {
           summary: res.data.productSummary,
           brand: res.data.brand,
           productType: res.data.prodType,
-          //skinType: res.data.skinType.stName//undefined
         });
       })
       .catch((err) => {
