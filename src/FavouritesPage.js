@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Input, Card, Spin, Row, Col, Divider, Button } from "antd";
+import { Link } from "react-router-dom";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { getUsername } from "./utils";
 import { Typography } from "antd";
 const { Title } = Typography;
+
 const Favourites = () => {
   const [liked, setLiked] = useState([]);
   const [others, setOthers] = useState([]);
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
   const username = getUsername();
-  const unlike = () => {};
+
   useEffect(() => {
     axios
       .get("https://localhost:5001/api/User/LikeList_User/" + username)
@@ -82,7 +84,9 @@ const Favourites = () => {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <a href="/product"> {p.product.productName}</a>
+                    <Link to={`/product/${p.product.productName}`}>
+                      {p.product.productName}
+                    </Link>
                     <Button
                       type="text"
                       onClick={() => handleDislike(p.product.productName)}
@@ -106,8 +110,19 @@ const Favourites = () => {
       <Row gutter={[16, 16]}>
         {others.map((p) => (
           <Col span={6}>
-            <Card key={p.idp} title={p.productName}>
-              <p>Use: {p.use}</p> <p>Summary: {p.summary}</p>
+            <Card
+              title={
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Link to={`/product/${p.productName}`}>{p.productName}</Link>
+                </div>
+              }
+              bordered={false}
+              style={{ width: 300 }}
+            >
+              <p>Use : {p.use}</p>
+              <p>Summary : {p.summary}</p>
             </Card>
           </Col>
         ))}
@@ -118,8 +133,21 @@ const Favourites = () => {
       <Row gutter={[16, 16]}>
         {brands.map((p) => (
           <Col span={6}>
-            <Card key={p.product.idp} title={p.product.productName}>
-              <p>Use: {p.product.use}</p> <p>Summary: {p.product.summary}</p>
+            <Card
+              title={
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Link to={`/product/${p.product.productName}`}>
+                    {p.product.productName}
+                  </Link>
+                </div>
+              }
+              bordered={false}
+              style={{ width: 300 }}
+            >
+              <p>Use : {p.product.use}</p>
+              <p>Summary : {p.product.summary}</p>
             </Card>
           </Col>
         ))}

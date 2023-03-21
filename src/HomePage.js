@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Input, Card, Row, Col, Checkbox, Button, Form } from "antd";
 import axios from "axios";
 import { HeartOutlined } from "@ant-design/icons";
@@ -22,24 +23,24 @@ const Home = () => {
       .catch((err) => console.log(err.message));
   };
   useEffect(() => {
-    if(localStorage.getItem("token") == null){
-         axios
-           .get("https://localhost:5001/api/Product/Get_Products")
-           .then((res) => {
-             console.log(res.data, "Izbacio sve");
-             setProducts(res.data);
-           })
-           .catch((err) => console.log(err.message));
-    }else{
+    if (localStorage.getItem("token") == null) {
       axios
-        .get("https://localhost:5001/api/Product/GetNotLiked/"+username)
+        .get("https://localhost:5001/api/Product/Get_Products")
+        .then((res) => {
+          console.log(res.data, "Izbacio sve");
+          setProducts(res.data);
+        })
+        .catch((err) => console.log(err.message));
+    } else {
+      axios
+        .get("https://localhost:5001/api/Product/GetNotLiked/" + username)
         .then((res) => {
           console.log(res.data, "Izbacio sve od usera");
           setProducts(res.data);
         })
         .catch((err) => console.log(err.message));
     }
- 
+
     axios
       .get("https://localhost:5001/api/User/LikeList_User/" + username)
       .then((res) => {
@@ -108,7 +109,7 @@ const Home = () => {
       )
       .then((res) => {
         console.log("Liked");
-    
+
         window.location.reload();
       })
       .catch((err) => {
@@ -190,15 +191,13 @@ const Home = () => {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <span>{p.productName}</span>
+                    <Link to={`/product/${p.productName}`}>
+                      {p.productName}
+                    </Link>
                     <Button
                       type="text"
                       onClick={() => handleLike(p.productName)}
-                      icon={
-                     
-                          <HeartOutlined />
-                       
-                      }
+                      icon={<HeartOutlined />}
                     />
                   </div>
                 }
