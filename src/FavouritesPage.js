@@ -82,7 +82,7 @@ const Favourites = () => {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <span>{p.product.productName}</span>
+                    <a href="/product"> {p.product.productName}</a>
                     <Button
                       type="text"
                       onClick={() => handleDislike(p.product.productName)}

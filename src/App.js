@@ -16,6 +16,7 @@ import Favourites from "./FavouritesPage";
 import Admin from "./AdminPage";
 import MenuItem from "antd/es/menu/MenuItem";
 import { useState, useEffect } from "react";
+import Product from "./ProductPage";
 const { Header, Content, Footer } = Layout;
 function App() {
   const {
@@ -100,6 +101,7 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/favourites" element={<Favourites />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/product" element={<Product />} />
             </Routes>
           </div>
         </Content>
