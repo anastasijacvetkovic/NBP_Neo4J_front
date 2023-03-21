@@ -24,18 +24,18 @@ const Favourites = () => {
         console.log(err.message);
         setLoading(false);
       });
-    // axios
-    //   .get(
-    //     "https://localhost:5001/api/Filter/Recommend_ProductsBySimilarity/" +
-    //       username
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data, "Liked products similarity");
-    //     setOthers(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.message);
-    //   });
+    axios
+      .get(
+        "https://localhost:5001/api/Filter/Recommend_ProductsBySimilarity/" +
+          username
+      )
+      .then((res) => {
+        console.log(res.data, "Liked products similarity");
+        setOthers(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
 
     axios
       .get(
@@ -106,8 +106,8 @@ const Favourites = () => {
       <Row gutter={[16, 16]}>
         {others.map((p) => (
           <Col span={6}>
-            <Card key={p.others.idp} title={p.others.productName}>
-              <p>Use: {p.others.use}</p> <p>Summary: {p.others.summary}</p>
+            <Card key={p.idp} title={p.productName}>
+              <p>Use: {p.use}</p> <p>Summary: {p.summary}</p>
             </Card>
           </Col>
         ))}
