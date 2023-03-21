@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useState, useEffect } from "react";
 import {
   Divider,
   Space,
@@ -12,6 +13,16 @@ import {
 const { Title } = Typography;
 
 const Admin = () => {
+  const [productUpdate, setProductUpdate] = useState([]);
+  const getProducts = () => {
+    axios
+      .get("https://localhost:5001/api/Product/Get_Products/")
+      .then((res) => {
+        console.log(res.data);
+        setProductUpdate(res.data);
+      })
+      .cath((err) => console.log(err.message));
+  };
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -171,7 +182,7 @@ const Admin = () => {
         </Form.Item>
       </Form>
       <Divider orientation="left">Update product</Divider>
-      <Dropdown menu={{ items }}>
+      <Dropdown menu={{ productUpdate }}>
         <a onClick={(e) => e.preventDefault()}>
           <Space>Pick product you want to update</Space>
         </a>
@@ -183,41 +194,14 @@ const Admin = () => {
         }}
         onFinish={onFinish}
       >
-        <Form.Item
-          label="Product name"
-          name="productName"
-          rules={[
-            {
-              required: true,
-              message: "Please input product's name!",
-            },
-          ]}
-        >
+        <Form.Item label="Product name" name="productName">
           <Input />
         </Form.Item>
 
-        <Form.Item
-          label="Product use"
-          name="use"
-          rules={[
-            {
-              required: true,
-              message: "Please input product's use!",
-            },
-          ]}
-        >
+        <Form.Item label="Product use" name="use">
           <Input />
         </Form.Item>
-        <Form.Item
-          label="Product summary"
-          name="summary"
-          rules={[
-            {
-              required: true,
-              message: "Please input product's summary!",
-            },
-          ]}
-        >
+        <Form.Item label="Product summary" name="summary">
           <Input />
         </Form.Item>
 
@@ -652,7 +636,7 @@ const Admin = () => {
               <Space>Pick brand you want to delete</Space>
             </a>
           </Dropdown>
-          <Button type="primary" htmlType="onCLick">
+          <Button type="primary" htmlType="onClick">
             Delete brand
           </Button>
         </Space>
