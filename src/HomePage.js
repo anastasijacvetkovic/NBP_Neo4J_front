@@ -12,6 +12,11 @@ const Home = () => {
   const [ing, setIngredients] = useState([]);
   const [ptype, setPType] = useState([]);
   const [stype, setSType] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedIng, setSelectedIng] = useState([]);
+  const [selectedPT, setSelectedPT] = useState([]);
+  const [selectedST, setSelectedST] = useState([]);
+  const [, setTick] = useState(0);
   /////////////////////////////////////////////////////
   const onSearch = (value) => {
     axios
@@ -22,6 +27,11 @@ const Home = () => {
       })
       .catch((err) => console.log(err.message));
   };
+
+  const forceUpdate = () => {
+    setTick((tick) => tick + 1);
+  };
+
   useEffect(() => {
     if (localStorage.getItem("token") == null) {
       axios
@@ -98,7 +108,10 @@ const Home = () => {
       .catch((err) => {
         console.log(err.message);
       });
+
+    forceUpdate();
   }, []);
+
   const handleLike = (productName) => {
     axios
       .post(
@@ -117,24 +130,79 @@ const Home = () => {
       });
   };
   /////////////////////////////////////////////////
-  const onChange = (checkedValues) => {
-    console.log("checked = ", checkedValues);
+  const onChange = (e) => {
+    var value = e.target.value;
+    //console.log(e.target.value);
+    setSelectedBrands((p) => {
+      if (e.target.checked) {
+        return [...p, value];
+      } else {
+        return p.filter((v) => v !== value);
+      }
+    });
   };
-  const onFinish = (values) => {
-    //var brandNames = values.name;
-    console.log(values);
-    //axios.get("https://localhost:5001/api/Filter/Filter");
+  const onChangeIng = (e) => {
+    var value = e.target.value;
+    //console.log(e.target.value);
+    setSelectedIng((p) => {
+      if (e.target.checked) {
+        return [...p, value];
+      } else {
+        return p.filter((v) => v !== value);
+      }
+    });
+  };
+  const onChangePT = (e) => {
+    var value = e.target.value;
+    //console.log(e.target.value);
+    setSelectedPT((p) => {
+      if (e.target.checked) {
+        return [...p, value];
+      } else {
+        return p.filter((v) => v !== value);
+      }
+    });
+  };
+  const onChangeST = (e) => {
+    var value = e.target.value;
+    //console.log(e.target.value);
+    setSelectedST((p) => {
+      if (e.target.checked) {
+        return [...p, value];
+      } else {
+        return p.filter((v) => v !== value);
+      }
+    });
+  };
+  const update = (slB, slI, slPT, slST) => {
+    const bodyUp = {
+      brands: slB,
+      skinTypes: slST,
+      productTypes: slPT,
+      indredients: slI,
+    };
+
+    console.log(bodyUp);
+    axios
+      .put("https://localhost:5001/api/Filter/Filter/", bodyUp)
+      .then((res) => {
+        console.log(res.data);
+        setProducts(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
   /////////////////////////////////////////////////////
   return (
     <div>
       <Search placeholder="input search text" onSearch={onSearch} enterButton />
-      <Form onFinish={onFinish}>
+      <Form>
         <Form.Item>
           <p>Brand:</p>
           {brands.map((p) => {
             return (
-              <Checkbox value={p.idb} onChange={onChange}>
+              <Checkbox name="brName" value={p.name} onChange={onChange}>
                 {p.name}
               </Checkbox>
             );
@@ -144,7 +212,7 @@ const Home = () => {
           <p>Ingredients:</p>
           {ing.map((i) => {
             return (
-              <Checkbox value={i.idi} onChange={onChange}>
+              <Checkbox name="ingName" value={i.name} onChange={onChangeIng}>
                 {i.name}
               </Checkbox>
             );
@@ -154,7 +222,7 @@ const Home = () => {
           <p>Product type:</p>
           {ptype.map((pt) => {
             return (
-              <Checkbox value={pt.idpt} onChange={onChange}>
+              <Checkbox name="prodType" value={pt.name} onChange={onChangePT}>
                 {pt.name}
               </Checkbox>
             );
@@ -165,7 +233,7 @@ const Home = () => {
           <p>Skin type:</p>
           {stype.map((st) => {
             return (
-              <Checkbox value={st.idst} onChange={onChange}>
+              <Checkbox name="skinType" value={st.sType} onChange={onChangeST}>
                 {st.sType}
               </Checkbox>
             );
@@ -175,8 +243,11 @@ const Home = () => {
         <Form.Item>
           <Button
             type="primary"
-            htmlType="submit"
+            htmlType="onClick"
             className="login-form-button"
+            onClick={() => {
+              update(selectedBrands, selectedIng, selectedPT, selectedST);
+            }}
           >
             Find
           </Button>
