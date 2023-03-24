@@ -169,37 +169,37 @@ const RelationshipsAdmin = () => {
       })
       .catch((err) => console.log(err.message));
   };
-   const onFinishAssPPT = (e) => {
-     var pr = e.productName;
-     var br = e.brName;
-     axios
-       .post(
-         "https://localhost:5001/api/Relationships/Assign_UsedAs/" +
-           pr +
-           "/" +
-           br
-       )
-       .then((res) => {
-         console.log("pogle u neo4j");
-       })
-       .catch((err) => console.log(err.message));
-   };
-   const deleteAssPPT = (e) => {
-     var pr = e.productName;
-     var br = e.brName;
+  const onFinishAssPPT = (e) => {
+    var pr = e.productName;
+    var br = e.brName;
+    axios
+      .post(
+        "https://localhost:5001/api/Relationships/Assign_UsedAs/" +
+          pr +
+          "/" +
+          br
+      )
+      .then((res) => {
+        console.log("pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const deleteAssPPT = (e) => {
+    var pr = e.productName;
+    var br = e.brName;
 
-     axios
-       .delete(
-         "https://localhost:5001/api/Relationships/Delete_UsedAs/" +
-           pr +
-           "/" +
-           br
-       )
-       .then((res) => {
-         console.log("pogle u neo4j");
-       })
-       .catch((err) => console.log(err.message));
-   };
+    axios
+      .delete(
+        "https://localhost:5001/api/Relationships/Delete_UsedAs/" +
+          pr +
+          "/" +
+          br
+      )
+      .then((res) => {
+        console.log("pogle u neo4j");
+      })
+      .catch((err) => console.log(err.message));
+  };
   return (
     <>
       <Title level={3}>Relationships</Title>

@@ -48,7 +48,11 @@ const BrandAdmin = () => {
     axios
       .post("https://localhost:5001/api/Brand/Create_Brand/", brand)
       .then((res) => {
-        message.success("successfully created a brand!");
+        if (res.status != 202) {
+          message.success("successfully created a brand!");
+        } else {
+          message.error("brand with that name already exists!");
+        }
       })
       .catch((err) => console.log(err.message));
   };

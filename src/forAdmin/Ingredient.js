@@ -20,7 +20,6 @@ const IngredientAdmin = () => {
   }, []);
   const onFinish = (values) => {};
   const onFinishAI = (values) => {
-    console.log("Success:", values);
     var ingn = values.name;
     var iu = values.usage;
     var ii = values.irritancy;
@@ -32,7 +31,11 @@ const IngredientAdmin = () => {
     axios
       .post("https://localhost:5001/api/Ingredient/Create_Ingredient/", ing)
       .then((res) => {
-        message.success("successfully created an ingredient!");
+        if (res.status != 202) {
+          message.success("successfully created an ingredient!");
+        } else {
+          message.error("ingredient with that name already exists!");
+        }
       })
       .catch((err) => console.log(err.message));
   };

@@ -75,7 +75,11 @@ const ProductAdmin = () => {
     axios
       .post("https://localhost:5001/api/Product/Create_Product/", prod)
       .then((res) => {
-        message.success("successfully created a product!");
+        if (res.status != 202) {
+          message.success("successfully created a product!");
+        } else {
+          message.error("product with that name already exists!");
+        }
       })
       .catch((err) => console.log(err.message));
   };
