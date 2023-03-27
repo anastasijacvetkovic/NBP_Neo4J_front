@@ -262,19 +262,19 @@ const Home = () => {
               })}
             </Form.Item>
           </Panel>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="onClick"
-              className="login-form-button"
-              onClick={() => {
-                update(selectedBrands, selectedIng, selectedPT, selectedST);
-              }}
-            >
-              Find
-            </Button>
-          </Form.Item>
         </Collapse>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="onClick"
+            className="login-form-button"
+            onClick={() => {
+              update(selectedBrands, selectedIng, selectedPT, selectedST);
+            }}
+          >
+            Find
+          </Button>
+        </Form.Item>
       </Form>
       {notfound === true ? (
         <p>no products matched the description :/</p>
