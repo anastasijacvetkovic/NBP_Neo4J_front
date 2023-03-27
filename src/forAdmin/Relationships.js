@@ -85,7 +85,11 @@ const RelationshipsAdmin = () => {
           pre
       )
       .then((res) => {
-        console.log("pogle u neo4j");
+        if (res.status === 202) {
+          message.error("Product not found");
+        } else if (res.status === 203) {
+          message.error("Ingredient not found");
+        } else message.success("Successfully assigned ingredient to a product");
       })
       .catch((err) => console.log(err.message));
   };
@@ -248,7 +252,7 @@ const RelationshipsAdmin = () => {
               </Form.Item>
 
               <Form.Item label="Percentage" name="prec">
-                <InputNumber min={1} max={10} defaultValue={3} />
+                <InputNumber min={1} max={10} />
               </Form.Item>
 
               <Form.Item

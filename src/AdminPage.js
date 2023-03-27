@@ -21,7 +21,6 @@ const { Title } = Typography;
 const Admin = () => {
   return (
     <>
-      <h1>PLEASE FILL IN ALL THE FILEDS !</h1>
       <ProductAdmin />
       <IngredientAdmin />
       <BrandAdmin />
