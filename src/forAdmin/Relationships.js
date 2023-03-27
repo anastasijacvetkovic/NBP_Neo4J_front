@@ -195,13 +195,13 @@ const RelationshipsAdmin = () => {
   };
   const onFinishAssPPT = (e) => {
     var pr = e.productName;
-    var br = e.brName;
+    var pt = e.ptName;
     axios
       .post(
         "https://localhost:5001/api/Relationships/Assign_UsedAs/" +
           pr +
           "/" +
-          br
+          pt
       )
       .then((res) => {
         if (res.status === 202) {
@@ -215,14 +215,14 @@ const RelationshipsAdmin = () => {
   };
   const deleteAssPPT = (e) => {
     var pr = e.productName;
-    var br = e.brName;
+    var pt = e.ptName;
 
     axios
       .delete(
         "https://localhost:5001/api/Relationships/Delete_UsedAs/" +
           pr +
           "/" +
-          br
+          pt
       )
       .then((res) => {
         if (res.status === 202) {
