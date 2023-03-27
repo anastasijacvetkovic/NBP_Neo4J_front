@@ -36,7 +36,11 @@ const ProductAdmin = () => {
           s
       )
       .then((res) => {
-        console.log("Pogle u neo4j");
+        if (res.status === 202) {
+          message.error("product not found");
+        } else {
+          message.success("successfully updated this product");
+        }
       })
       .catch((err) => console.log(err.message));
   };
@@ -54,7 +58,6 @@ const ProductAdmin = () => {
         "https://localhost:5001/api/Product/Get_ProductForUpdate/" + productName
       )
       .then((res) => {
-        console.log(res.data);
         setProductData({
           prName: res.data.productName,
           prUse: res.data.use,
@@ -94,7 +97,8 @@ const ProductAdmin = () => {
     axios
       .delete("https://localhost:5001/api/Product/Delete_Product/" + pr)
       .then((res) => {
-        message.success("successfully deleted");
+        if (res.status === 202) message.error("product not found");
+        else message.success("successfully deleted");
       })
       .catch((err) => console.log(err.message));
   };

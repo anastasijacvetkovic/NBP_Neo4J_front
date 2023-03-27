@@ -32,7 +32,11 @@ const BrandAdmin = () => {
           bs
       )
       .then((res) => {
-        console.log("Pogle u neo4j");
+        if (res.status === 202) {
+          message.error("brand not found");
+        } else {
+          message.success("successfully updated this brand");
+        }
       })
       .catch((err) => console.log(err.message));
   };
@@ -73,7 +77,8 @@ const BrandAdmin = () => {
     axios
       .delete("https://localhost:5001/api/Brand/Delete_Brand/" + pr)
       .then((res) => {
-        message.success("successfully deleted");
+        if (res.status === 202) message.error("brand not found");
+        else message.success("successfully deleted");
       })
       .catch((err) => console.log(err.message));
   };

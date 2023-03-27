@@ -109,7 +109,11 @@ const IngredientAdmin = () => {
           irt
       )
       .then((res) => {
-        message.success("successfully updated");
+        if (res.status === 202) {
+          message.error("ingredient not found");
+        } else {
+          message.success("successfully updated this ingredient");
+        }
       })
       .catch((err) => console.log(err.message));
   };
@@ -119,7 +123,8 @@ const IngredientAdmin = () => {
     axios
       .delete("https://localhost:5001/api/Ingredient/Delete_Ingredient/" + pr)
       .then((res) => {
-        message.success("successfully deleted");
+        if (res.status === 202) message.error("ingredient not found");
+        else message.success("successfully deleted");
       })
       .catch((err) => console.log(err.message));
   };
