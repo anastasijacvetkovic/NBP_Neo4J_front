@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Input, Card, Row, Col, Checkbox, Button, Form } from "antd";
+import { Input, Card, Row, Col, Checkbox, Button, Form, Collapse } from "antd";
 import axios from "axios";
 import { HeartOutlined } from "@ant-design/icons";
 import { getUsername } from "./utils";
@@ -27,7 +27,7 @@ const Home = () => {
       })
       .catch((err) => console.log(err.message));
   };
-
+  const { Panel } = Collapse;
   const forceUpdate = () => {
     setTick((tick) => tick + 1);
   };
@@ -197,83 +197,108 @@ const Home = () => {
   return (
     <div>
       <Search placeholder="input search text" onSearch={onSearch} enterButton />
+
       <Form>
-        <Form.Item>
-          <p>Brand:</p>
-          {brands.map((p) => {
-            return (
-              <Checkbox name="brName" value={p.name} onChange={onChange}>
-                {p.name}
-              </Checkbox>
-            );
-          })}
-        </Form.Item>
-        <Form.Item>
-          <p>Ingredients:</p>
-          {ing.map((i) => {
-            return (
-              <Checkbox name="ingName" value={i.name} onChange={onChangeIng}>
-                {i.name}
-              </Checkbox>
-            );
-          })}
-        </Form.Item>
-        <Form.Item>
-          <p>Product type:</p>
-          {ptype.map((pt) => {
-            return (
-              <Checkbox name="prodType" value={pt.name} onChange={onChangePT}>
-                {pt.name}
-              </Checkbox>
-            );
-          })}
-        </Form.Item>
+        <Collapse>
+          <Panel header="Brand">
+            <Form.Item>
+              {brands.map((p) => {
+                return (
+                  <Checkbox name="brName" value={p.name} onChange={onChange}>
+                    {p.name}
+                  </Checkbox>
+                );
+              })}
+            </Form.Item>
+          </Panel>
 
-        <Form.Item>
-          <p>Skin type:</p>
-          {stype.map((st) => {
-            return (
-              <Checkbox name="skinType" value={st.sType} onChange={onChangeST}>
-                {st.sType}
-              </Checkbox>
-            );
-          })}
-        </Form.Item>
-
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="onClick"
-            className="login-form-button"
-            onClick={() => {
-              update(selectedBrands, selectedIng, selectedPT, selectedST);
-            }}
-          >
-            Find
-          </Button>
-        </Form.Item>
+          <Panel header="Ingredients">
+            <Form.Item>
+              {ing.map((i) => {
+                return (
+                  <Checkbox
+                    name="ingName"
+                    value={i.name}
+                    onChange={onChangeIng}
+                  >
+                    {i.name}
+                  </Checkbox>
+                );
+              })}
+            </Form.Item>
+          </Panel>
+          <Panel header="Product type">
+            <Form.Item>
+              {ptype.map((pt) => {
+                return (
+                  <Checkbox
+                    name="prodType"
+                    value={pt.name}
+                    onChange={onChangePT}
+                  >
+                    {pt.name}
+                  </Checkbox>
+                );
+              })}
+            </Form.Item>
+          </Panel>
+          <Panel header="Skin type">
+            <Form.Item>
+              {stype.map((st) => {
+                return (
+                  <Checkbox
+                    name="skinType"
+                    value={st.sType}
+                    onChange={onChangeST}
+                  >
+                    {st.sType}
+                  </Checkbox>
+                );
+              })}
+            </Form.Item>
+          </Panel>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="onClick"
+              className="login-form-button"
+              onClick={() => {
+                update(selectedBrands, selectedIng, selectedPT, selectedST);
+              }}
+            >
+              Find
+            </Button>
+          </Form.Item>
+        </Collapse>
       </Form>
+
       <Row gutter={[16, 16]}>
         {products.map((p) => {
           return (
-            <Col span={6}>
+            <Col span={8}>
               <Card
+                type="inner"
                 title={
                   <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
                     <Link to={`/product/${p.productName}`}>
                       {p.productName}
                     </Link>
-                    <Button
-                      type="text"
-                      onClick={() => handleLike(p.productName)}
-                      icon={<HeartOutlined />}
-                    />
                   </div>
                 }
+                extra={
+                  <Button
+                    type="text"
+                    onClick={() => handleLike(p.productName)}
+                    icon={<HeartOutlined />}
+                  />
+                }
                 bordered={false}
-                style={{ width: 300 }}
+                style={{ width: "100%" }}
               >
                 <p>Use : {p.use}</p>
                 <p>Summary : {p.summary}</p>
