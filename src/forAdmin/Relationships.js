@@ -106,7 +106,11 @@ const RelationshipsAdmin = () => {
           pr
       )
       .then((res) => {
-        console.log("pogle u neo4j");
+        if (res.status === 202) {
+          message.error("product doesn't exist");
+        } else if (res.status === 203) {
+          message.error("ingredient doesn't exist");
+        } else message.success("successfully deleted this relationship");
       })
       .catch((err) => console.log(err.message));
   };
@@ -122,7 +126,11 @@ const RelationshipsAdmin = () => {
           br
       )
       .then((res) => {
-        console.log("pogle u neo4j");
+        if (res.status === 202) {
+          message.error("product doesn't exist");
+        } else if (res.status === 203) {
+          message.error("brand doesn't exist");
+        } else message.success("successfully assigned brand to a product");
       })
       .catch((err) => console.log(err.message));
   };
@@ -138,7 +146,11 @@ const RelationshipsAdmin = () => {
           br
       )
       .then((res) => {
-        console.log("pogle u neo4j");
+        if (res.status === 202) {
+          message.error("product doesn't exist");
+        } else if (res.status === 203) {
+          message.error("brand doesn't exist");
+        } else message.success("successfully deleted the relationship");
       })
       .catch((err) => console.log(err.message));
   };
@@ -153,7 +165,11 @@ const RelationshipsAdmin = () => {
           st
       )
       .then((res) => {
-        console.log("pogle u neo4j");
+        if (res.status === 202) {
+          message.error("product doesn't exist");
+        } else if (res.status === 203) {
+          message.error("skin type doesn't exist");
+        } else message.success("successfully assigned skin type to a product");
       })
       .catch((err) => console.log(err.message));
   };
@@ -169,7 +185,11 @@ const RelationshipsAdmin = () => {
           st
       )
       .then((res) => {
-        console.log("pogle u neo4j");
+        if (res.status === 202) {
+          message.error("product doesn't exist");
+        } else if (res.status === 203) {
+          message.error("skin type doesn't exist");
+        } else message.success("successfully deleted this relationship");
       })
       .catch((err) => console.log(err.message));
   };
@@ -184,7 +204,12 @@ const RelationshipsAdmin = () => {
           br
       )
       .then((res) => {
-        console.log("pogle u neo4j");
+        if (res.status === 202) {
+          message.error("product doesn't exist");
+        } else if (res.status === 203) {
+          message.error("product type doesn't exist");
+        } else
+          message.success("successfully assigned product type to a product");
       })
       .catch((err) => console.log(err.message));
   };
@@ -200,7 +225,11 @@ const RelationshipsAdmin = () => {
           br
       )
       .then((res) => {
-        console.log("pogle u neo4j");
+        if (res.status === 202) {
+          message.error("product doesn't exist");
+        } else if (res.status === 203) {
+          message.error("product type doesn't exist");
+        } else message.success("successfully deleted this relationship");
       })
       .catch((err) => console.log(err.message));
   };
@@ -252,7 +281,7 @@ const RelationshipsAdmin = () => {
               </Form.Item>
 
               <Form.Item label="Percentage" name="prec">
-                <InputNumber min={1} max={10} />
+                <InputNumber min={0} max={100} />
               </Form.Item>
 
               <Form.Item
