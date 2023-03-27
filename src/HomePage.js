@@ -17,13 +17,18 @@ const Home = () => {
   const [selectedPT, setSelectedPT] = useState([]);
   const [selectedST, setSelectedST] = useState([]);
   const [, setTick] = useState(0);
+  const [notfound, setNotFound] = useState(false);
   /////////////////////////////////////////////////////
   const onSearch = (value) => {
     axios
       .get("https://localhost:5001/api/User/SearchEngine_Products/" + value)
       .then((res) => {
-        console.log(res.data, "Pronaso");
-        setProducts(res.data);
+        if (res.status === 202) {
+          setNotFound(true);
+        } else {
+          setNotFound(false);
+          setProducts(res.data);
+        }
       })
       .catch((err) => console.log(err.message));
   };
@@ -271,7 +276,11 @@ const Home = () => {
           </Form.Item>
         </Collapse>
       </Form>
-
+      {notfound === true ? (
+        <p>no products matched the description :/</p>
+      ) : (
+        <></>
+      )}
       <Row gutter={[16, 16]}>
         {products.map((p) => {
           return (
