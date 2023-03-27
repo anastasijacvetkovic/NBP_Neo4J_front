@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Input, Card, Row, Col, Checkbox, Button, Form, Collapse } from "antd";
+import {
+  Input,
+  Card,
+  Row,
+  Col,
+  Checkbox,
+  Button,
+  Form,
+  Collapse,
+  Space,
+} from "antd";
 import axios from "axios";
 import { HeartOutlined } from "@ant-design/icons";
 import { getUsername } from "./utils";
@@ -201,90 +211,108 @@ const Home = () => {
   /////////////////////////////////////////////////////
   return (
     <div>
-      <Search placeholder="input search text" onSearch={onSearch} enterButton />
+      <Space
+        direction="vertical"
+        size="middle"
+        style={{
+          display: "flex",
+        }}
+      >
+        <Search
+          placeholder="input search text"
+          onSearch={onSearch}
+          enterButton
+        />
 
-      <Form>
-        <Collapse>
-          <Panel header="Brand">
-            <Form.Item>
-              {brands.map((p) => {
-                return (
-                  <Checkbox name="brName" value={p.name} onChange={onChange}>
-                    {p.name}
-                  </Checkbox>
-                );
-              })}
-            </Form.Item>
-          </Panel>
+        <Form>
+          <Collapse>
+            <Panel header="Brand">
+              <Form.Item>
+                {brands.map((p) => {
+                  return (
+                    <Checkbox name="brName" value={p.name} onChange={onChange}>
+                      {p.name}
+                    </Checkbox>
+                  );
+                })}
+              </Form.Item>
+            </Panel>
 
-          <Panel header="Ingredients">
+            <Panel header="Ingredients">
+              <Form.Item>
+                {ing.map((i) => {
+                  return (
+                    <Checkbox
+                      name="ingName"
+                      value={i.name}
+                      onChange={onChangeIng}
+                    >
+                      {i.name}
+                    </Checkbox>
+                  );
+                })}
+              </Form.Item>
+            </Panel>
+            <Panel header="Product type">
+              <Form.Item>
+                {ptype.map((pt) => {
+                  return (
+                    <Checkbox
+                      name="prodType"
+                      value={pt.name}
+                      onChange={onChangePT}
+                    >
+                      {pt.name}
+                    </Checkbox>
+                  );
+                })}
+              </Form.Item>
+            </Panel>
+            <Panel header="Skin type">
+              <Form.Item>
+                {stype.map((st) => {
+                  return (
+                    <Checkbox
+                      name="skinType"
+                      value={st.sType}
+                      onChange={onChangeST}
+                    >
+                      {st.sType}
+                    </Checkbox>
+                  );
+                })}
+              </Form.Item>
+            </Panel>
+          </Collapse>
+          <div style={{ textAlign: "center" }}>
             <Form.Item>
-              {ing.map((i) => {
-                return (
-                  <Checkbox
-                    name="ingName"
-                    value={i.name}
-                    onChange={onChangeIng}
-                  >
-                    {i.name}
-                  </Checkbox>
-                );
-              })}
+              <Button
+                type="primary"
+                htmlType="onClick"
+                className="login-form-button"
+                style={{
+                  width: "10rem",
+                  marginTop: "1rem",
+                }}
+                onClick={() => {
+                  update(selectedBrands, selectedIng, selectedPT, selectedST);
+                }}
+              >
+                Find products
+              </Button>
             </Form.Item>
-          </Panel>
-          <Panel header="Product type">
-            <Form.Item>
-              {ptype.map((pt) => {
-                return (
-                  <Checkbox
-                    name="prodType"
-                    value={pt.name}
-                    onChange={onChangePT}
-                  >
-                    {pt.name}
-                  </Checkbox>
-                );
-              })}
-            </Form.Item>
-          </Panel>
-          <Panel header="Skin type">
-            <Form.Item>
-              {stype.map((st) => {
-                return (
-                  <Checkbox
-                    name="skinType"
-                    value={st.sType}
-                    onChange={onChangeST}
-                  >
-                    {st.sType}
-                  </Checkbox>
-                );
-              })}
-            </Form.Item>
-          </Panel>
-        </Collapse>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="onClick"
-            className="login-form-button"
-            onClick={() => {
-              update(selectedBrands, selectedIng, selectedPT, selectedST);
-            }}
-          >
-            Find
-          </Button>
-        </Form.Item>
-      </Form>
-      {notfound === true ? (
-        <p>no products matched the description :/</p>
-      ) : (
-        <></>
-      )}
+          </div>
+        </Form>
+        {notfound === true ? (
+          <p>no products matched the description :/</p>
+        ) : (
+          <></>
+        )}
+      </Space>
       <Row gutter={[16, 16]}>
         {products.map((p) => {
           return (
-            <Col span={8}>
+            <Col xs={28} sm={16} md={12} lg={10} xl={8}>
               <Card
                 type="inner"
                 title={
